@@ -2,22 +2,16 @@
 #include <cassert>
 #include <charconv>
 #include <iostream>
-#include <optional>
-#include <vector>
+#include <limits>
 
 #include <aoc/segment.hpp>
+#include <aoc/wire.hpp>
 
 namespace
 {
-    struct Wire
+    aoc::Wire read_wire()
     {
-        std::vector<aoc::Segment> horizontal;
-        std::vector<aoc::Segment> vertical;
-    };
-
-    Wire read_wire()
-    {
-        Wire ret;
+        aoc::Wire ret;
         std::string line;
         std::getline(std::cin, line);
 
@@ -53,16 +47,7 @@ namespace
                 throw std::runtime_error{"Invalid input"};
                 break;
             }
-            if(first_point.x == next_point.x)
-            {
-                // horizontal line
-                ret.horizontal.push_back(aoc::Segment{first_point, next_point});
-            }
-            else
-            {
-                assert(first_point.y == next_point.y);
-                ret.vertical.push_back(aoc::Segment{first_point, next_point});
-            }
+            ret.add_segment(aoc::Segment{first_point, next_point});
             first_point = next_point;
             if(*it != ',')
             {
@@ -82,6 +67,26 @@ int main()
 {
     auto first_wire = read_wire();
     auto second_wire = read_wire();
+
+    auto minimum_distance = std::numeric_limits<std::size_t>::max();
+    auto iterate_verticals = [&minimum_distance](auto const & a,
+                                                 auto const & b) {
+        std::for_each(std::begin(a.vertical), std::end(a.vertical),
+                      [&minimum_distance, &b](auto const & segment) {
+                          auto segment_min =
+                              aoc::closest_intersection(segment, b.horizontal);
+                          if(segment_min)
+                          {
+                              minimum_distance = std::min(minimum_distance,
+                                                          segment_min->second);
+                          }
+                      });
+    };
+
+    iterate_verticals(first_wire, second_wire);
+    iterate_verticals(second_wire, first_wire);
+
+    std::cout << minimum_distance << '\n';
 
     return 0;
 }

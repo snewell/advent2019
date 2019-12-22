@@ -41,9 +41,9 @@ namespace aoc
     {
         assert(vert.first.x == vert.second.x);
         assert(hor.first.y == hor.second.y);
-        if((vert.first.y >= hor.first.y) && (vert.second.y <= hor.second.y))
+        if((vert.first.y > hor.first.y) && (vert.second.y < hor.second.y))
         {
-            if((hor.first.x <= vert.first.x) && (hor.second.x >= vert.second.x))
+            if((hor.first.x < vert.first.x) && (hor.second.x > vert.second.x))
             {
                 return Point{vert.first.x, hor.first.y};
             }

@@ -38,6 +38,7 @@ endfunction()
 add_library(segment SHARED
     point.cpp
     segment.cpp
+    wire.cpp
 )
 target_include_directories(segment
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
