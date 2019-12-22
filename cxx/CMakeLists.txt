@@ -27,3 +27,4 @@ endfunction()
 
 create_puzzle(1a)
 create_puzzle(1b)
+create_puzzle(2a)
