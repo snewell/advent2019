@@ -5,6 +5,8 @@ project("advent-2019"
         CXX
 )
 
+enable_testing()
+
 set(input_dir "${CMAKE_CURRENT_SOURCE_DIR}/../input")
 
 function(create_puzzle name)
@@ -12,11 +14,11 @@ function(create_puzzle name)
         ${name}.cpp
         ${ARGN}
     )
+    target_link_libraries(${name}
+        PRIVATE aoc
+    )
     set_target_properties(${name} PROPERTIES
         CXX_EXTENSIONS OFF
-    )
-    target_compile_features(${name} PRIVATE
-        cxx_std_17
     )
 
     add_custom_target(${name}-test
@@ -25,7 +27,24 @@ function(create_puzzle name)
     )
 endfunction()
 
+add_library(aoc SHARED
+    point.cpp
+    segment.cpp
+)
+target_include_directories(aoc
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+set_target_properties(aoc PROPERTIES
+    CXX_EXTENSIONS OFF
+)
+target_compile_features(aoc PUBLIC
+    cxx_std_17
+)
+
+add_subdirectory(test)
+
 create_puzzle(1a)
 create_puzzle(1b)
 create_puzzle(2a)
 create_puzzle(2b)
+create_puzzle(3a)
