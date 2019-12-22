@@ -33,7 +33,6 @@ function(create_puzzle name)
         DEPENDS ${name}
         COMMAND $<TARGET_FILE:${name}> <"${input_dir}/${name}"
     )
-    message(STATUS "${name} CREATE_PUZZLE_VALIDATE=${CREATE_PUZZLE_VALIDATE}")
     if(CREATE_PUZZLE_VALIDATE)
         set(validate_test "${name}-validate")
         add_test(${validate_test}
@@ -68,8 +67,12 @@ create_puzzle(1a
 create_puzzle(1b
     VALIDATE 4925580
 )
-create_puzzle(2a)
-create_puzzle(2b)
+create_puzzle(2a
+    VALIDATE 3760627
+)
+create_puzzle(2b
+    VALIDATE 7195
+)
 create_puzzle(3a
     LIBRARIES
         segment

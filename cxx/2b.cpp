@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <iterator>
@@ -8,15 +9,15 @@
 
 namespace
 {
-    std::vector<int> load_program()
+    std::vector<int> load_program(std::istream & input)
     {
         std::vector<int> state;
         int value;
         char dummy;
-        while(std::cin >> value)
+        while(input >> value)
         {
             state.push_back(value);
-            std::cin >> dummy;
+            input >> dummy;
         }
         return state;
     }
@@ -51,9 +52,19 @@ namespace
     }
 } // namespace
 
-int main()
+int main(int argc, char ** argv)
 {
-    auto const default_state = load_program();
+    auto default_state = [argc, argv]() {
+        if(argc == 1)
+        {
+            return load_program(std::cin);
+        }
+        else
+        {
+            std::ifstream input{argv[1]};
+            return load_program(input);
+        }
+    }();
 
     std::array<std::pair<int, std::function<bool(std::vector<int> &,
                                                  std::vector<int>::iterator)>>,
@@ -97,8 +108,7 @@ int main()
                 // '\n';
                 if(state.front() == 19690720)
                 {
-                    std::cout << "noun = " << noun << " verb = " << verb
-                              << '\n';
+                    std::cout << 100 * noun + verb << '\n';
                     return 0;
                 }
             }
