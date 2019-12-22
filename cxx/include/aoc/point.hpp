@@ -13,9 +13,13 @@ namespace aoc
         int y;
     };
 
-    std::size_t distance(Point first, Point second);
+    std::size_t distance(Point first, Point second) noexcept;
 
-    bool operator==(Point lhs, Point rhs);
+    bool operator==(Point lhs, Point rhs) noexcept;
+
+    bool operator!=(Point lhs, Point rhs) noexcept;
+
+    bool operator<(Point lhs, Point rhs) noexcept;
 } // namespace aoc
 
 #endif

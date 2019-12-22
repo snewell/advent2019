@@ -34,3 +34,22 @@ TEST(Point, distance_cross)
 {
     distance_helper(aoc::Point{10, 0}, aoc::Point{-10, 0}, 20);
 }
+
+TEST(Point, compare_self)
+{
+    ASSERT_EQ(origin, origin);
+}
+
+TEST(Point, compare_less_x)
+{
+    aoc::Point const a{-10, 0};
+    aoc::Point const b{0, 100};
+    ASSERT_LT(a, b);
+}
+
+TEST(Point, compare_equal_x_diff_y)
+{
+    aoc::Point const a{-10, 100};
+    aoc::Point const b{-10, 10};
+    ASSERT_LT(a, b);
+}
