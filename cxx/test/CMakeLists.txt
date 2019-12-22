@@ -1,19 +1,26 @@
 find_package(GTest CONFIG REQUIRED)
 
 function(create_test name)
-    add_executable(${name} ${ARGN})
+    set(options "")
+    set(one_value_args "")
+    set(multi_value_args LIBRARIES SOURCES)
+    cmake_parse_arguments(CREATE_TEST "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
+    add_executable(${name} ${CREATE_TEST_SOURCES})
     set_target_properties(${name} PROPERTIES
         CXX_EXTENSIONS OFF
     )
     target_link_libraries(${name}
-        PRIVATE aoc
+        PRIVATE ${CREATE_TEST_LIBRARIES}
         PRIVATE GTest::gtest
         PRIVATE GTest::gtest_main
     )
     add_test(${name} ${name})
 endfunction()
 
-create_test(segment
-    point_test.cpp
-    segment_test.cpp
+create_test(segment_tests
+    SOURCES
+        point_test.cpp
+        segment_test.cpp
+    LIBRARIES
+        segment
 )
