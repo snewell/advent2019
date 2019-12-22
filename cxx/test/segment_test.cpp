@@ -12,7 +12,7 @@ TEST(Segment, ctor_order)
     ASSERT_EQ(first, second);
 }
 
-TEST(Intersection, intersect_origin)
+TEST(Intersection, origin)
 {
     aoc::Segment const vert{aoc::Point{0, 10}, aoc::Point{0, -10}};
     aoc::Segment const hor{aoc::Point{10, 0}, aoc::Point{-10, 0}};
@@ -23,39 +23,42 @@ TEST(Intersection, intersect_origin)
     ASSERT_EQ(*intersection, origin);
 }
 
-TEST(Intersection, closest_origin)
+TEST(Intersection, multi_origin)
 {
     aoc::Segment const vert{aoc::Point{0, 10}, aoc::Point{0, -10}};
     std::vector<aoc::Segment> const hors{
         aoc::Segment{aoc::Point{-10, 0}, aoc::Point{10, 0}}};
 
-    auto closest = aoc::closest_intersection(vert, hors);
-    ASSERT_TRUE(closest);
+    std::vector<aoc::Point> points;
+    aoc::check_intersections(vert, hors, points);
+    ASSERT_EQ(1, points.size());
     aoc::Point const origin{0, 0};
-    ASSERT_EQ(origin, closest->first);
-    ASSERT_EQ(0, closest->second);
+    ASSERT_EQ(origin, points.front());
+    ASSERT_EQ(0, aoc::distance(origin, points.front()));
 }
 
-TEST(Intersection, closest_iterative)
+TEST(Intersection, multiple)
 {
     aoc::Segment const vert{aoc::Point{0, 10}, aoc::Point{0, -10}};
     std::vector<aoc::Segment> const hors{
         aoc::Segment{aoc::Point{-10, 9}, aoc::Point{10, 9}},
         aoc::Segment{aoc::Point{-10, 8}, aoc::Point{10, 8}}};
 
-    auto closest = aoc::closest_intersection(vert, hors);
-    ASSERT_TRUE(closest);
-    aoc::Point const origin{0, 8};
-    ASSERT_EQ(origin, closest->first);
-    ASSERT_EQ(8, closest->second);
+    std::vector<aoc::Point> points;
+    aoc::check_intersections(vert, hors, points);
+    ASSERT_EQ(2, points.size());
+    // aoc::Point const origin{0, 8};
+    // ASSERT_EQ(origin, closest->first);
+    // ASSERT_EQ(8, closest->second);
 }
 
-TEST(Intersection, closest_none)
+TEST(Intersection, none)
 {
     aoc::Segment const vert{aoc::Point{0, 10}, aoc::Point{0, -10}};
     std::vector<aoc::Segment> const hors{
         aoc::Segment{aoc::Point{-10, 20}, aoc::Point{10, 20}}};
 
-    auto closest = aoc::closest_intersection(vert, hors);
-    ASSERT_FALSE(closest);
+    std::vector<aoc::Point> points;
+    aoc::check_intersections(vert, hors, points);
+    ASSERT_TRUE(points.empty());
 }

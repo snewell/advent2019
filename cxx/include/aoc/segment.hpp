@@ -21,9 +21,9 @@ namespace aoc
 
     std::optional<Point> intersection_point(Segment vert, Segment hor);
 
-    std::optional<std::pair<Point, std::size_t>>
-    closest_intersection(Segment vert,
-                         std::vector<Segment> const & horizontals);
+    void check_intersections(Segment vert,
+                             std::vector<Segment> const & horizontals,
+                             std::vector<Point> & points);
 } // namespace aoc
 
 #endif

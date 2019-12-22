@@ -51,33 +51,17 @@ namespace aoc
         return std::nullopt;
     }
 
-    std::optional<std::pair<Point, std::size_t>>
-    closest_intersection(Segment vert, std::vector<Segment> const & horizontals)
+    void check_intersections(Segment vert,
+                             std::vector<Segment> const & horizontals,
+                             std::vector<Point> & points)
     {
-        static Point const origin{0, 0};
-
-        std::optional<std::pair<Point, std::size_t>> ret = std::nullopt;
         std::for_each(std::begin(horizontals), std::end(horizontals),
-                      [vert, &ret](auto const & segment) {
+                      [vert, &points](auto const & segment) {
                           auto intersection = intersection_point(vert, segment);
                           if(intersection)
                           {
-                              auto distance =
-                                  aoc::distance(origin, *intersection);
-                              if(ret)
-                              {
-                                  if(distance < ret->second)
-                                  {
-                                      ret->first = *intersection;
-                                      ret->second = distance;
-                                  }
-                              }
-                              else
-                              {
-                                  ret = std::make_pair(*intersection, distance);
-                              }
+                              points.push_back(*intersection);
                           }
                       });
-        return ret;
     }
 } // namespace aoc

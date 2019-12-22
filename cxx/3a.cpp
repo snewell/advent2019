@@ -88,25 +88,28 @@ int main(int argc, char ** argv)
     auto second_wire = read_wire();
     */
 
-    auto minimum_distance = std::numeric_limits<std::size_t>::max();
-    auto iterate_verticals = [&minimum_distance](auto const & a,
-                                                 auto const & b) {
+    std::vector<aoc::Point> points;
+    auto iterate_verticals = [&points](auto const & a, auto const & b) {
         std::for_each(std::begin(a.vertical), std::end(a.vertical),
-                      [&minimum_distance, &b](auto const & segment) {
-                          auto segment_min =
-                              aoc::closest_intersection(segment, b.horizontal);
-                          if(segment_min)
-                          {
-                              minimum_distance = std::min(minimum_distance,
-                                                          segment_min->second);
-                          }
+                      [&points, &b](auto const & segment) {
+                          aoc::check_intersections(segment, b.horizontal,
+                                                   points);
                       });
     };
 
     iterate_verticals(first_wire, second_wire);
     iterate_verticals(second_wire, first_wire);
 
-    std::cout << minimum_distance << '\n';
+    aoc::Point const origin{0, 0};
+    auto b = std::begin(points);
+    auto const e = std::end(points);
+    assert(b != e);
+    auto minimum = aoc::distance(origin, *b);
+    std::for_each(std::next(b, 1), e, [origin, &minimum](auto point) {
+        auto const distance = aoc::distance(origin, point);
+        minimum = std::min(minimum, distance);
+    });
+    std::cout << minimum << '\n';
 
     return 0;
 }
