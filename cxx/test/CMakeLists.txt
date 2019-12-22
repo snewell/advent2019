@@ -14,7 +14,7 @@ function(create_test name)
         PRIVATE GTest::gtest
         PRIVATE GTest::gtest_main
     )
-    add_test(${name} ${name})
+    add_test(${name} ${name} "--gtest_output=xml:${CMAKE_CURRENT_BINARY_DIR}/${name}_results.xml")
 endfunction()
 
 create_test(segment_tests
