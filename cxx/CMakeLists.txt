@@ -11,7 +11,7 @@ set(input_dir "${CMAKE_CURRENT_SOURCE_DIR}/../input")
 
 function(create_puzzle name)
     set(options "")
-    set(one_value_args "")
+    set(one_value_args VALIDATE)
     set(multi_value_args LIBRARIES SOURCES)
     cmake_parse_arguments(CREATE_PUZZLE "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
     add_executable(${name}
@@ -33,6 +33,16 @@ function(create_puzzle name)
         DEPENDS ${name}
         COMMAND $<TARGET_FILE:${name}> <"${input_dir}/${name}"
     )
+    message(STATUS "${name} CREATE_PUZZLE_VALIDATE=${CREATE_PUZZLE_VALIDATE}")
+    if(CREATE_PUZZLE_VALIDATE)
+        set(validate_test "${name}-validate")
+        add_test(${validate_test}
+            ${name} "${input_dir}/${name}"
+        )
+        set_tests_properties(${name}-validate PROPERTIES
+            PASS_REGULAR_EXPRESSION "${CREATE_PUZZLE_VALIDATE}"
+        )
+    endif()
 endfunction()
 
 add_library(segment SHARED
@@ -52,11 +62,16 @@ target_compile_features(segment PUBLIC
 
 add_subdirectory(test)
 
-create_puzzle(1a)
-create_puzzle(1b)
+create_puzzle(1a
+    VALIDATE 3285627
+)
+create_puzzle(1b
+    VALIDATE 4925580
+)
 create_puzzle(2a)
 create_puzzle(2b)
 create_puzzle(3a
     LIBRARIES
         segment
+    VALIDATE 227
 )

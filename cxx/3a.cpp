@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cassert>
 #include <charconv>
+#include <fstream>
 #include <iostream>
 #include <limits>
 
@@ -9,11 +10,11 @@
 
 namespace
 {
-    aoc::Wire read_wire()
+    aoc::Wire read_wire(std::istream & input)
     {
         aoc::Wire ret;
         std::string line;
-        std::getline(std::cin, line);
+        std::getline(input, line);
 
         aoc::Point first_point{0, 0};
         auto b = std::begin(line);
@@ -61,12 +62,31 @@ namespace
         return ret;
     }
 
+    auto read_wires(std::istream & input)
+    {
+        auto first_wire = read_wire(input);
+        auto second_wire = read_wire(input);
+        return std::make_pair(first_wire, second_wire);
+    }
 } // namespace
 
-int main()
+int main(int argc, char ** argv)
 {
-    auto first_wire = read_wire();
+    auto [first_wire, second_wire] = [argc, argv]() {
+        if(argc == 1)
+        {
+            return read_wires(std::cin);
+        }
+        else
+        {
+            std::ifstream input{argv[1]};
+            return read_wires(input);
+        }
+    }();
+    /*
+    read_wire();
     auto second_wire = read_wire();
+    */
 
     auto minimum_distance = std::numeric_limits<std::size_t>::max();
     auto iterate_verticals = [&minimum_distance](auto const & a,
