@@ -10,9 +10,9 @@
 
 namespace
 {
-    aoc::Wire read_wire(std::istream & input)
+    aoc::OrderedWire read_wire(std::istream & input)
     {
-        aoc::Wire ret;
+        aoc::OrderedWire ret;
         std::string line;
         std::getline(input, line);
 
@@ -100,16 +100,22 @@ int main(int argc, char ** argv)
     iterate_verticals(first_wire, second_wire);
     iterate_verticals(second_wire, first_wire);
 
-    aoc::Point const origin{0, 0};
-    auto b = std::begin(points);
-    auto const e = std::end(points);
-    assert(b != e);
-    auto minimum = aoc::distance(origin, *b);
-    std::for_each(std::next(b, 1), e, [origin, &minimum](auto point) {
-        auto const distance = aoc::distance(origin, point);
-        minimum = std::min(minimum, distance);
-    });
-    std::cout << minimum << '\n';
+    std::sort(std::begin(points), std::end(points));
+    auto first_costs = calculate_step_cost(points, first_wire);
+    auto second_costs = calculate_step_cost(points, second_wire);
 
+    auto b = std::begin(first_costs);
+    auto const e = std::end(first_costs);
+
+    auto second_it = second_costs.find(b->first);
+    assert(second_it != std::end(second_costs));
+    auto min = b->second + second_it->second;
+    std::for_each(std::next(b, 1), e, [&min, &second_costs](auto const & p) {
+        auto const second_it = second_costs.find(p.first);
+        assert(second_it != std::end(second_costs));
+        auto cost = p.second + second_it->second;
+        min = std::min(min, cost);
+    });
+    std::cout << min << '\n';
     return 0;
 }

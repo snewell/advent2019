@@ -21,6 +21,7 @@ create_test(segment_tests
     SOURCES
         point_test.cpp
         segment_test.cpp
+        wire_test.cpp
     LIBRARIES
         segment
 )

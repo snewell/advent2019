@@ -35,6 +35,13 @@ TEST(Point, distance_cross)
     distance_helper(aoc::Point{10, 0}, aoc::Point{-10, 0}, 20);
 }
 
+TEST(Point, y_axis)
+{
+    aoc::Point const first{8, 0};
+    aoc::Point const second{8, 5};
+    distance_helper(first, second, 5);
+}
+
 TEST(Point, compare_self)
 {
     ASSERT_EQ(origin, origin);

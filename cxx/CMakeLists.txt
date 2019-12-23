@@ -78,3 +78,7 @@ create_puzzle(3a
         segment
     VALIDATE 227
 )
+create_puzzle(3b
+    LIBRARIES
+        segment
+)

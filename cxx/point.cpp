@@ -4,6 +4,10 @@ namespace
 {
     std::size_t axis_distance(int a, int b)
     {
+        auto const first = std::min(a, b);
+        auto const second = std::max(a, b);
+        return second - first;
+#if 0
         if((a >= 0) && (b >= 0))
         {
             return a + b;
@@ -23,6 +27,7 @@ namespace
                 return std::abs(b - a);
             }
         }
+#endif
     }
 } // namespace
 
