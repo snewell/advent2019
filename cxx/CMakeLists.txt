@@ -44,19 +44,26 @@ function(create_puzzle name)
     endif()
 endfunction()
 
-add_library(segment SHARED
+function(create_library name)
+    add_library(${name} SHARED ${ARGN})
+    target_include_directories(${name}
+        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    )
+    set_target_properties(${name} PROPERTIES
+        CXX_EXTENSIONS OFF
+    )
+    target_compile_features(${name} PUBLIC
+        cxx_std_17
+    )
+endfunction()
+
+create_library(segment
     point.cpp
     segment.cpp
     wire.cpp
 )
-target_include_directories(segment
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-)
-set_target_properties(segment PROPERTIES
-    CXX_EXTENSIONS OFF
-)
-target_compile_features(segment PUBLIC
-    cxx_std_17
+create_library(password
+    password.cpp
 )
 
 add_subdirectory(test)
@@ -81,4 +88,8 @@ create_puzzle(3a
 create_puzzle(3b
     LIBRARIES
         segment
+)
+create_puzzle(4a
+    LIBRARIES
+        password
 )
