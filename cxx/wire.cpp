@@ -50,6 +50,7 @@ namespace aoc
     calculate_step_cost(std::vector<aoc::Point> const & points,
                         aoc::OrderedWire const & wire)
     {
+        assert(std::is_sorted(std::begin(points), std::end(points)));
         std::unordered_map<aoc::Point, std::size_t> ret;
         auto local_cost = 0;
         auto const point_b = std::begin(points);
@@ -76,6 +77,7 @@ namespace aoc
                             }
                         });
                 };
+
                 if(first_point.x == second_point.x)
                 {
                     // vertical
@@ -114,5 +116,27 @@ namespace aoc
             });
         assert(points.size() == ret.size());
         return ret;
+    }
+
+    using StepCosts = std::unordered_map<aoc::Point, std::size_t>;
+
+    std::size_t minimum_total_step_cost(StepCosts first_costs,
+                                        StepCosts second_costs)
+    {
+        auto b = std::begin(first_costs);
+        auto const e = std::end(first_costs);
+
+        auto second_it = second_costs.find(b->first);
+        assert(second_it != std::end(second_costs));
+        auto min = b->second + second_it->second;
+        std::for_each(std::next(b, 1), e,
+                      [&min, &second_costs](auto const & p) {
+                          auto const second_it = second_costs.find(p.first);
+                          assert(second_it != std::end(second_costs));
+                          auto cost = p.second + second_it->second;
+                          min = std::min(min, cost);
+                      });
+
+        return min;
     }
 } // namespace aoc

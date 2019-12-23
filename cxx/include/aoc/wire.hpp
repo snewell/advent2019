@@ -27,6 +27,11 @@ namespace aoc
     std::unordered_map<aoc::Point, std::size_t>
     calculate_step_cost(std::vector<aoc::Point> const & points,
                         aoc::OrderedWire const & wire);
+
+    using StepCosts = std::unordered_map<aoc::Point, std::size_t>;
+
+    std::size_t minimum_total_step_cost(StepCosts first_costs,
+                                        StepCosts second_costs);
 } // namespace aoc
 
 #endif
