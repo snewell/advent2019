@@ -83,10 +83,6 @@ int main(int argc, char ** argv)
             return read_wires(input);
         }
     }();
-    /*
-    read_wire();
-    auto second_wire = read_wire();
-    */
 
     std::vector<aoc::Point> points;
     auto iterate_verticals = [&points](auto const & a, auto const & b) {
