@@ -33,7 +33,7 @@ create_test(machine_tests
         machine
 )
 
-create_test(orbin_test
+create_test(orbit_test
     SOURCES
         orbit_test.cpp
     LIBRARIES
