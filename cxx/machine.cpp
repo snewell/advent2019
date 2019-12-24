@@ -71,6 +71,20 @@ namespace
         }
 
         aoc::InstructionResult
+        less_than(aoc::Memory::const_iterator instruction, aoc::Memory & state,
+                  aoc::Io const & io)
+        {
+            return binary_op(instruction, state, io, std::less<void>{});
+        }
+
+        aoc::InstructionResult equal(aoc::Memory::const_iterator instruction,
+                                     aoc::Memory & state, aoc::Io const & io)
+        {
+            return binary_op(instruction, state, io,
+                             [](auto lhs, auto rhs) { return lhs == rhs; });
+        }
+
+        aoc::InstructionResult
         exit_program(aoc::Memory::const_iterator instruction,
                      aoc::Memory & state, aoc::Io const & io)
         {
@@ -112,6 +126,8 @@ namespace aoc
              std::make_pair(2, opcode_implementations::mul),
              std::make_pair(3, opcode_implementations::read_int),
              std::make_pair(4, opcode_implementations::print_int),
+             std::make_pair(7, opcode_implementations::less_than),
+             std::make_pair(8, opcode_implementations::equal),
              std::make_pair(99, opcode_implementations::exit_program)}};
 
         return opcode_table;
