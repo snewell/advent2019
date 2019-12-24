@@ -6,7 +6,7 @@
 int main(int argc, char ** argv)
 {
     auto do_work = [](auto & input) {
-        auto const solar_system = aoc::parse_orbits(input);
+        auto const solar_system = aoc::parse_satelites(input);
         auto const count = aoc::count_orbits(solar_system, "COM");
         std::cout << count << '\n';
         return 0;
