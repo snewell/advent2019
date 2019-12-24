@@ -31,3 +31,27 @@ TEST(Password, input_ceiling)
     auto const expected_ceiling{"559999"};
     ASSERT_EQ(expected_ceiling, ceiling);
 }
+
+TEST(Password, test_single)
+{
+    std::string const base{"123456"};
+    auto count = aoc::count_possible_endings(base, 5);
+    // count should be 5:
+    //  123455
+    //  123456
+    //  123457
+    //  123458
+    //  123459
+    ASSERT_EQ(5, count);
+}
+
+TEST(Password, test_multiple)
+{
+    std::string const base{"123888"};
+    auto count = aoc::count_possible_endings(base, 4);
+    // count should be 3:
+    //  123888
+    //  123889
+    //  123899
+    ASSERT_EQ(3, count);
+}

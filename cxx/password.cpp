@@ -1,6 +1,7 @@
 #include <aoc/password.hpp>
 
 #include <algorithm>
+#include <cassert>
 
 namespace aoc
 {
@@ -52,6 +53,32 @@ namespace aoc
                 ret.push_back('9');
             }
             return ret;
+        }
+    }
+
+    std::size_t count_possible_endings(std::string base,
+                                       std::size_t prefix_length)
+    {
+        // TODO: Figure out a better algorithm.  I'm pretty sure there's an
+        // obvious pattern that I'm missing.
+        assert(prefix_length > 0);
+        if((base.size() - prefix_length) == 1)
+        {
+            return '9' - base[prefix_length - 1] + 1;
+        }
+        else if(prefix_length < base.size())
+        {
+            std::size_t sub = 0;
+            while(base[prefix_length] <= '9')
+            {
+                sub += count_possible_endings(base, prefix_length + 1);
+                ++base[prefix_length];
+            }
+            return sub;
+        }
+        else
+        {
+            return 0;
         }
     }
 } // namespace aoc
