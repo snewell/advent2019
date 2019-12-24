@@ -60,6 +60,9 @@ endfunction()
 create_library(machine
     machine.cpp
 )
+create_library(orbit
+    orbit.cpp
+)
 create_library(segment
     point.cpp
     segment.cpp
@@ -105,7 +108,6 @@ create_puzzle(5a
         machine
     VALIDATE 7566643
 )
-
 create_puzzle(5b
     LIBRARIES
         machine
