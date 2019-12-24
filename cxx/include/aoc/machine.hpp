@@ -22,13 +22,20 @@ namespace aoc
         struct Halt
         {
         };
+
         struct Advance
         {
             int count;
         };
+
+        struct SetInstructionPointer
+        {
+            int address;
+        };
     } // namespace results
 
-    using InstructionResult = std::variant<results::Halt, results::Advance>;
+    using InstructionResult = std::variant<results::Halt, results::Advance,
+                                           results::SetInstructionPointer>;
 
     struct OpcodeTable
     {

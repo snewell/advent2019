@@ -105,3 +105,9 @@ create_puzzle(5a
         machine
     VALIDATE 7566643
 )
+
+create_puzzle(5b
+    LIBRARIES
+        machine
+    VALIDATE 9265694
+)

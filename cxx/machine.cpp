@@ -37,6 +37,27 @@ namespace
         return aoc::results::Advance{4};
     }
 
+    template <typename BOOLEAN_OP>
+    aoc::InstructionResult boolean_op(aoc::Memory::const_iterator instruction,
+                                      aoc::Memory & state, aoc::Io const & io,
+                                      BOOLEAN_OP fn)
+    {
+        (void)io;
+        auto const immediate_first = test_position(*instruction, 100);
+        auto const immediate_second = test_position(*instruction, 1000);
+        auto const a = std::next(instruction, 1);
+        auto const b = std::next(instruction, 2);
+        if(fn(immediate_first ? *a : state[*a]))
+        {
+            return aoc::results::SetInstructionPointer{
+                immediate_second ? *b : state[*b]};
+        }
+        else
+        {
+            return aoc::results::Advance{3};
+        }
+    }
+
     namespace opcode_implementations
     {
         aoc::InstructionResult add(aoc::Memory::const_iterator instruction,
@@ -85,6 +106,22 @@ namespace
         }
 
         aoc::InstructionResult
+        jump_true(aoc::Memory::const_iterator instruction, aoc::Memory & state,
+                  aoc::Io const & io)
+        {
+            return boolean_op(instruction, state, io,
+                              [](auto lhs) { return lhs != 0; });
+        }
+
+        aoc::InstructionResult
+        jump_false(aoc::Memory::const_iterator instruction, aoc::Memory & state,
+                   aoc::Io const & io)
+        {
+            return boolean_op(instruction, state, io,
+                              [](auto lhs) { return lhs == 0; });
+        }
+
+        aoc::InstructionResult
         exit_program(aoc::Memory::const_iterator instruction,
                      aoc::Memory & state, aoc::Io const & io)
         {
@@ -126,6 +163,8 @@ namespace aoc
              std::make_pair(2, opcode_implementations::mul),
              std::make_pair(3, opcode_implementations::read_int),
              std::make_pair(4, opcode_implementations::print_int),
+             std::make_pair(5, opcode_implementations::jump_true),
+             std::make_pair(6, opcode_implementations::jump_false),
              std::make_pair(7, opcode_implementations::less_than),
              std::make_pair(8, opcode_implementations::equal),
              std::make_pair(99, opcode_implementations::exit_program)}};
@@ -145,7 +184,8 @@ namespace aoc
         auto const opcode_table_b = std::begin(opcode_table.opcode_table);
         auto const opcode_table_e = std::end(opcode_table.opcode_table);
 
-        auto current_instruction = std::begin(state);
+        auto const memory_start = std::begin(state);
+        auto current_instruction = memory_start;
         auto run = true;
         while(run)
         {
@@ -161,11 +201,19 @@ namespace aoc
                 auto opcode_result =
                     opcode_fn->second(current_instruction, state, io);
                 std::visit(
-                    [&run, &current_instruction](auto const & result) {
+                    [&run, &current_instruction,
+                     memory_start](auto const & result) {
                         using T = std::decay_t<decltype(result)>;
                         if constexpr(std::is_same_v<T, results::Advance>)
                         {
                             std::advance(current_instruction, result.count);
+                        }
+                        else if constexpr(std::is_same_v<
+                                              T,
+                                              results::SetInstructionPointer>)
+                        {
+                            current_instruction =
+                                std::next(memory_start, result.address);
                         }
                         else if constexpr(std::is_same_v<T, results::Halt>)
                         {
