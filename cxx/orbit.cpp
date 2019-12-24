@@ -4,6 +4,20 @@
 
 namespace aoc
 {
+    SolarSystem parse_orbits(std::istream & input)
+    {
+        SolarSystem ret;
+        std::string orbit_data;
+        while(input >> orbit_data)
+        {
+            auto const b = std::begin(orbit_data);
+            auto const e = std::end(orbit_data);
+            auto it = std::find(b, e, ')');
+            ret.emplace(std::string{b, it}, std::string{std::next(it), e});
+        }
+        return ret;
+    }
+
     std::size_t count_orbits(SolarSystem const & solar_system,
                              std::string const & center, std::size_t depth)
     {

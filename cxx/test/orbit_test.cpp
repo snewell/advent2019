@@ -55,3 +55,21 @@ TEST(Orbit, complex_example)
     auto const orbits = aoc::count_orbits(solar_system, "COM");
     ASSERT_EQ(42, orbits);
 }
+
+TEST(Orbit, parse_complex)
+{
+    std::istringstream input{"COM)B\n"
+                             "B)C\n"
+                             "C)D\n"
+                             "D)E\n"
+                             "E)F\n"
+                             "B)G\n"
+                             "G)H\n"
+                             "D)I\n"
+                             "E)J\n"
+                             "J)K\n"
+                             "K)L"};
+    auto solar_system = aoc::parse_orbits(input);
+    auto const orbits = aoc::count_orbits(solar_system, "COM");
+    ASSERT_EQ(42, orbits);
+}

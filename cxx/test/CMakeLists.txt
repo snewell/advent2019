@@ -33,6 +33,13 @@ create_test(machine_tests
         machine
 )
 
+create_test(orbin_test
+    SOURCES
+        orbit_test.cpp
+    LIBRARIES
+        orbit
+)
+
 create_test(password_tests
     SOURCES
         password_test.cpp

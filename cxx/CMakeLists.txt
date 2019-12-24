@@ -113,3 +113,8 @@ create_puzzle(5b
         machine
     VALIDATE 9265694
 )
+create_puzzle(6a
+    LIBRARIES
+        orbit
+    VALIDATE 234446
+)
