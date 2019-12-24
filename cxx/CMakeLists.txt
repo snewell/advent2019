@@ -103,4 +103,5 @@ create_puzzle(4a
 create_puzzle(5a
     LIBRARIES
         machine
+    VALIDATE 7566643
 )
