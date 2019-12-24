@@ -26,6 +26,13 @@ create_test(segment_tests
         segment
 )
 
+create_test(machine_tests
+    SOURCES
+        machine_test.cpp
+    LIBRARIES
+        machine
+)
+
 create_test(password_tests
     SOURCES
         password_test.cpp

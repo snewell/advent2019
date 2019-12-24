@@ -100,3 +100,7 @@ create_puzzle(4a
     LIBRARIES
         password
 )
+create_puzzle(5a
+    LIBRARIES
+        machine
+)

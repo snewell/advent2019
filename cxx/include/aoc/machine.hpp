@@ -2,12 +2,20 @@
 #define AOC_MACHINE_HPP 1
 
 #include <functional>
+#include <istream>
+#include <ostream>
 #include <variant>
 #include <vector>
 
 namespace aoc
 {
     using Memory = std::vector<int>;
+
+    struct Io
+    {
+        std::istream & input;
+        std::ostream & output;
+    };
 
     namespace results
     {
@@ -24,8 +32,8 @@ namespace aoc
 
     struct OpcodeTable
     {
-        using OpcodeFn =
-            std::function<InstructionResult(Memory::const_iterator, Memory &)>;
+        using OpcodeFn = std::function<InstructionResult(
+            Memory::const_iterator, Memory &, Io const & io)>;
         using OpcodeEntry = std::pair<int, OpcodeFn>;
 
         OpcodeTable(std::vector<OpcodeEntry> opcodes);
@@ -35,12 +43,15 @@ namespace aoc
 
     OpcodeTable const & basic_opcodes();
 
+    OpcodeTable const & io_opcodes();
+
     struct Machine
     {
-        Machine(Memory memory, OpcodeTable const & opcodes);
+        Machine(Io io, Memory memory, OpcodeTable const & opcodes);
 
         void run();
 
+        Io io;
         Memory state;
         OpcodeTable const & opcode_table;
     };
