@@ -18,6 +18,20 @@ namespace aoc
         return ret;
     }
 
+    SolarSystem parse_orbits(std::istream & input)
+    {
+        SolarSystem ret;
+        std::string orbit_data;
+        while(input >> orbit_data)
+        {
+            auto const b = std::begin(orbit_data);
+            auto const e = std::end(orbit_data);
+            auto it = std::find(b, e, ')');
+            ret.emplace(std::string{std::next(it), e}, std::string{b, it});
+        }
+        return ret;
+    }
+
     std::size_t count_orbits(Satelites const & satelites,
                              std::string const & center, std::size_t depth)
     {
@@ -58,6 +72,13 @@ namespace aoc
     {
         auto const first_path = build_path(solar_system, first);
         auto const second_path = build_path(solar_system, second);
-        return second_path.size();
+        auto const first_e = std::end(first_path);
+        auto const unique_nodes = std::mismatch(std::begin(first_path), first_e,
+                                                std::begin(second_path));
+
+        auto const first_unique = std::distance(unique_nodes.first, first_e);
+        auto const second_unique =
+            std::distance(unique_nodes.second, std::end(second_path));
+        return first_unique + second_unique;
     }
 } // namespace aoc

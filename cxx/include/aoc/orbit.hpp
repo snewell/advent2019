@@ -12,6 +12,8 @@ namespace aoc
 
     Satelites parse_satelites(std::istream & input);
 
+    SolarSystem parse_orbits(std::istream & input);
+
     std::size_t count_orbits(Satelites const & satelites,
                              std::string const & center, std::size_t depth = 0);
 

@@ -118,3 +118,8 @@ create_puzzle(6a
         orbit
     VALIDATE 234446
 )
+create_puzzle(6b
+    LIBRARIES
+        orbit
+    VALIDATE 385
+)

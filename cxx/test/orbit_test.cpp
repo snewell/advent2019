@@ -74,7 +74,7 @@ TEST(Orbit, parse_complex)
     ASSERT_EQ(42, orbits);
 }
 
-TEST(Orbit, DISABLED_complex_hops)
+TEST(Orbit, complex_hops)
 {
     /*                          YOU
      *                          /
@@ -99,6 +99,26 @@ TEST(Orbit, DISABLED_complex_hops)
     solar_system.emplace("I", "D");
     solar_system.emplace("SAN", "I");
 
+    auto const hops = aoc::count_hops(solar_system, "YOU", "SAN");
+    ASSERT_EQ(4, hops);
+}
+
+TEST(Orbit, parse_complex_hops)
+{
+    std::istringstream input{"COM)B\n"
+                             "B)C\n"
+                             "C)D\n"
+                             "D)E\n"
+                             "E)F\n"
+                             "B)G\n"
+                             "G)H\n"
+                             "D)I\n"
+                             "E)J\n"
+                             "J)K\n"
+                             "K)L\n"
+                             "I)SAN\n"
+                             "K)YOU"};
+    auto solar_system = aoc::parse_orbits(input);
     auto const hops = aoc::count_hops(solar_system, "YOU", "SAN");
     ASSERT_EQ(4, hops);
 }
