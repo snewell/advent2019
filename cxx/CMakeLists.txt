@@ -57,6 +57,9 @@ function(create_library name)
     )
 endfunction()
 
+create_library(machine
+    machine.cpp
+)
 create_library(segment
     point.cpp
     segment.cpp
@@ -75,9 +78,13 @@ create_puzzle(1b
     VALIDATE 4925580
 )
 create_puzzle(2a
+    LIBRARIES
+        machine
     VALIDATE 3760627
 )
 create_puzzle(2b
+    LIBRARIES
+        machine
     VALIDATE 7195
 )
 create_puzzle(3a
