@@ -123,3 +123,8 @@ create_puzzle(6b
         orbit
     VALIDATE 385
 )
+create_puzzle(7a
+    LIBRARIES
+        machine
+    VALIDATE 19650
+)
