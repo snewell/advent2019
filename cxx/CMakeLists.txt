@@ -128,3 +128,8 @@ create_puzzle(7a
         machine
     VALIDATE 19650
 )
+create_puzzle(7b
+    LIBRARIES
+        machine
+    VALIDATE 35961106
+)
