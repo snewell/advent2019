@@ -60,6 +60,7 @@ namespace aoc
 
         Io io;
         Memory state;
+        Memory::const_iterator current_instruction;
         OpcodeTable const & opcode_table;
     };
 } // namespace aoc

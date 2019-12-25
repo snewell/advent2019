@@ -179,3 +179,22 @@ TEST(Machine, lt_example_immediate)
         ASSERT_EQ("0\n", os.str());
     }
 }
+
+TEST(Machine, resume)
+{
+    aoc::Memory default_memory = {
+        /* 00 */ 3, // read int
+        /* 01 */ 2, // store in address 2
+        /* 02 */ 0  // dummy address (will be overwritten
+    };
+    std::stringstream input;
+    std::stringstream output;
+    aoc::Machine machine{aoc::Io{input, output}, default_memory,
+                         aoc::io_opcodes()};
+
+    auto run = [&machine]() { machine.run(); };
+    ASSERT_THROW(run(), std::runtime_error);
+    input.clear();
+    input << 99 << '\n';
+    run();
+}

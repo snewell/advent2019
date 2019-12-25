@@ -76,18 +76,24 @@ namespace
                                         aoc::Memory & state, aoc::Io const & io)
         {
             auto address = std::next(instruction, 1);
-            assert(io.input);
             io.input >> state[*address];
-            assert(io.input);
-            return aoc::results::Advance{2};
+            if(io.input)
+            {
+                return aoc::results::Advance{2};
+            }
+            else
+            {
+                throw std::runtime_error{"Requires input"};
+            }
         }
 
         aoc::InstructionResult
         print_int(aoc::Memory::const_iterator instruction, aoc::Memory & state,
                   aoc::Io const & io)
         {
+            auto const immediate_first = test_position(*instruction, 100);
             auto address = std::next(instruction, 1);
-            io.output << state[*address] << '\n';
+            io.output << (immediate_first ? *address : state[*address]) << '\n';
             return aoc::results::Advance{2};
         }
 
@@ -175,6 +181,7 @@ namespace aoc
     Machine::Machine(Io io, Memory memory, OpcodeTable const & opcodes)
       : io{io}
       , state{std::move(memory)}
+      , current_instruction{std::begin(state)}
       , opcode_table{opcodes}
     {
     }
@@ -185,7 +192,6 @@ namespace aoc
         auto const opcode_table_e = std::end(opcode_table.opcode_table);
 
         auto const memory_start = std::begin(state);
-        auto current_instruction = memory_start;
         auto run = true;
         while(run)
         {
@@ -201,8 +207,7 @@ namespace aoc
                 auto opcode_result =
                     opcode_fn->second(current_instruction, state, io);
                 std::visit(
-                    [&run, &current_instruction,
-                     memory_start](auto const & result) {
+                    [&run, this, memory_start](auto const & result) {
                         using T = std::decay_t<decltype(result)>;
                         if constexpr(std::is_same_v<T, results::Advance>)
                         {
